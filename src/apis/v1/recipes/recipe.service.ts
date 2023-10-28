@@ -47,7 +47,6 @@ export const createRecipeRecordService = async (payload: Partial<IRecipe>, file:
         if (existingRecipe) {
             throw new ApiError({ message: 'Recipe already exists', status: httpStatus.BAD_REQUEST});
         }
-        payload.slug = generateSlug(payload.name);
         const createPayload = {} as Partial<IRecipe>;
         for (const [key, value] of Object.entries(payload)) {
             if (value) {
@@ -64,7 +63,6 @@ export const createRecipeRecordService = async (payload: Partial<IRecipe>, file:
 
         const recipe = new RecipeModel(createPayload);
         const record = await recipe.save();
-            await RecipeModel.create(createPayload);
         if (!record) {
             throw new ApiError({message: 'No record found', status: httpStatus.NOT_FOUND});
         }
